@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>StreetStyle — Tienda Urbana</title>
+  <meta name="description" content="StreetStyle: tienda urbana con filtro por categoría tipo tabs, vista detalle de producto, carrito persistente, cupones, calendario de ofertas y pago PayPal (sandbox)."/>
+
+  <!-- Tipografías -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="grain">
+  <div class="container">
+    <header role="banner">
+      <div class="brand">
+        <h1 class="logo">StreetStyle</h1>
+        <p class="slogan">Ropa urbana con carácter — hoodies, gorras, camisetas y pantalones.</p>
+      </div>
+
+      <!-- Tabs de categorías tipo KOAJ -->
+      <nav class="cat-tabs" aria-label="Categorías de productos">
+        <button class="cat-tab cat-tab--active" type="button" data-cat="todos">Todo</button>
+        <button class="cat-tab" type="button" data-cat="Pantalones">Pantalones</button>
+        <button class="cat-tab" type="button" data-cat="Hoodies">Hoodies</button>
+        <button class="cat-tab" type="button" data-cat="Camisetas">Camisetas</button>
+        <button class="cat-tab" type="button" data-cat="Gorras">Gorras</button>
+      </nav>
+    </header>
+
+    <main id="main" tabindex="-1">
+      <section id="productos" aria-live="polite" aria-busy="false"></section>
+
+      <section class="carrito" aria-label="Carrito de compras">
+        <h2>🛒 Carrito</h2>
+        <p><strong>Productos en carrito: <span id="cantidad-carrito">0</span></strong></p>
+        <ul id="lista-carrito"></ul>
+
+        <div class="totales">
+          <p>Subtotal: <strong id="subtotal-text">$0,00</strong></p>
+          <p>Descuento: <strong id="descuento-text">$0,00</strong></p>
+          <p>Impuestos: <strong id="impuestos-text">$0,00</strong></p>
+          <p class="total">Total: <strong id="total-text">$0,00</strong></p>
+        </div>
+
+        <div class="cupones" aria-label="Cupones de descuento">
+          <h3>🏷️ Cupones</h3>
+          <form id="cupon-form" class="cupon-form" autocomplete="off">
+            <input id="cupon-input" name="cupon" placeholder="Ingresa un cupón (p.ej. STREET10)"/>
+            <button class="button" type="submit">Aplicar cupón</button>
+          </form>
+          <div id="cupon-aplicado" class="pill" style="display:none"></div>
+          <p class="hint" style="margin-top:8px">
+            Cupones demo: <strong>STREET10</strong> (10%), <strong>URBAN15</strong> (15%), <strong>JUAN20</strong> (20%).
+          </p>
+        </div>
+
+        <div class="pago">
+          <h3>💳 Método de pago</h3>
+          <div id="paypal-button-container" style="margin-top:10px; display:none;"></div>
+          <p class="hint">PayPal sandbox. Si tu cuenta no admite COP, el sistema convierte COP → USD automáticamente.</p>
+        </div>
+
+        <div class="acciones">
+          <button id="btn-vaciar" class="vaciar" type="button">🧼 Vaciar</button>
+          <button id="btn-finalizar" class="finalizar" type="button">✅ Finalizar</button>
+        </div>
+
+        <div id="hints-vacios" class="hint" style="margin-top:16px;display:none"></div>
+      </section>
+
+      <!-- Calendario de ofertas (mes actual) -->
+      <section class="calendar" aria-label="Calendario de ofertas">
+        <div class="cal-head">
+          <div class="cal-title" id="cal-title">Ofertas — </div>
+          <small class="muted">Días destacados con descuento</small>
+        </div>
+        <div id="cal-grid" class="cal-grid" aria-live="polite"></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal de producto (tipo KOAJ) -->
+  <div id="product-modal" class="product-modal" aria-hidden="true">
+    <div class="product-modal__overlay" data-modal-close></div>
+    <div class="product-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <button class="product-modal__close" type="button" aria-label="Cerrar" data-modal-close>✕</button>
+
+      <div class="product-modal__gallery">
+        <img id="modal-img-main" class="product-modal__gallery-main" src="" alt="">
+      </div>
+
+      <div class="product-modal__info">
+        <h2 id="modal-title"></h2>
+        <p id="modal-price" class="product-modal__price"></p>
+        <p id="modal-desc" class="product-modal__desc"></p>
+
+        <div class="product-modal__section">
+          <strong>Talla</strong>
+          <div id="modal-sizes" class="sizes"></div>
+        </div>
+
+        <div class="product-modal__section">
+          <strong>Cantidad</strong>
+          <div class="qty-picker">
+            <button type="button" data-modal-dec>-</button>
+            <span id="modal-qty">1</span>
+            <button type="button" data-modal-inc>+</button>
+          </div>
+        </div>
+
+        <button class="button" type="button" data-modal-add>Añadir al carrito</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SDK PayPal (sandbox). Puedes reemplazar "sb" por tu client-id propio) -->
+  <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD&components=buttons,funding-eligibility"></script>
+
+  <!-- JS principal -->
+  <script src="app.js"></script>
+</body>
+</html>
